@@ -36,7 +36,7 @@ public class HelloController {
                 "<body>" +
                 "<form action='message' method='post'>" +
                 "<input type='text' name='name'>" +
-                "<input type='select' name='language'>" +
+                "<select name='language'>" +
                 "<option value=''>--Select--</option>" +
                 "<option value='english'>English</option>" +
                 "<option value='french'>French</option>" +
@@ -49,14 +49,19 @@ public class HelloController {
                 "</body>" +
                 "</html>";
     }
-    @GetMapping("message")
-    public static String createMessage(@RequestParam String name, @RequestParam String language) {
+
+    public static String createMessage(String name, String language) {
         HashMap<String,String> languageOptions = new HashMap<>();
         languageOptions.put("english","Hello, ");
         languageOptions.put("french","Bonjour, ");
         languageOptions.put("german","Guten Tag, ");
         languageOptions.put("spanish", "Buenos dias, ");
-        languageOptions.put("japanese","Konnichiwa");
+        languageOptions.put("japanese","Konnichiwa, ");
         return languageOptions.get(language)+name+"!";
+    }
+    @RequestMapping(value="message", method={RequestMethod.GET,RequestMethod.POST})
+    public static String postMessage(@RequestParam String name, @RequestParam String language) {
+        String message = createMessage(name, language);
+        return "<h1 style='text-align:center'>"+message+"</h1>";
     }
 }
